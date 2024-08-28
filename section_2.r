@@ -51,7 +51,29 @@ x = c(1,3,5,7,9)
 y = c(2,3,5,7,11,13)
 
 x+1 # num [1:5] 2 4 6 8 10
-y*2 # num [1:6] 4 6 10 14 22 26
+y*2 # num [1:6] 16 6 10 14 22 26
 length(x) # 5
 length(y) # 6
-x + y # num [1:6] 3 6 10 14 20 13
+# This expression had an unexpected result to me
+# x is shorter than y, so R goes through a "recycling process"
+# before adding the two vectors
+# meaning, it starts repeating the elements of the vector until it reaches
+# the desired length (the length of y)
+# x is transformed(recycled) to [1:6] 8 3 5 7 9 1
+# prior to the addition
+x + y # num [1:6] 3 6 10 14 20 14
+sum(x>5) # 2
+sum(x[x>5]) # 16
+sum(x>5 | x<3) # 3
+y[3] # 5 
+y[-3] # num [1:5] 2 3 7 11 13
+y[x] # num [1:5] 2 5 11 NA NA
+y[y>=7] # num [1:3] 7 11 13 
+
+# Problem 2.5
+x = c(1, 8, 2, 6, 3, 8, 5, 5, 5, 5)
+sum(x)/length(x)
+log(x, base = 10)
+(x -  4.4)/2.875
+diff(range(x))
+max(x)-min(x)
