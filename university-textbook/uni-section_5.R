@@ -6,7 +6,7 @@ N = 1000 # Total number of samples
 
 # There is box with 5 balls inside it, numbered 1 through 5.
 # You retrieve a ball from the box, return it and then retrieve a ball again.
-# What is the probability to retrieve that you will take same ball twice?
+# What is the probability to retrieve the same ball twice?
 
 # Solution
 
@@ -65,9 +65,9 @@ calls = sample(1:7, 12, T) # Generate 1 sample
 calls.table = sapply(1:N, function(x) sample(1:7, 12, T), T)
 
 
-# Solution B - Without a for cycle
 
-count.weekdays = function(calls.sample) {
+
+countWeekdaysWithCalls = function(calls.sample) {
   b = vector("numeric", 7)
   for (i in 1:length(calls.sample)) {
     b[calls.sample[i]] = 1
@@ -75,37 +75,30 @@ count.weekdays = function(calls.sample) {
   sum(b)
 }
 
-calls.test = function(N) {
+# Solution A
+
+calls = function(N) {
   calls.samples = sapply(1:N, function(X) sample(1:7, 12, replace = TRUE))
-  calls.weekdays = apply(calls.samples, 2, function(x) count.weekdays(x))
+  calls.weekdays = apply(calls.samples, 2, function(x) countWeekdaysWithCalls(x))
   sum(calls.weekdays==7)/N
 }
 
-calls.test(1000)
+calls(1000)
 
-
-calls = function(N) {
-  calls.table = sapply(1:N, function(x) sample(1:7, 12, T), T)
-  for (i in 1:N) {
-    
-  }
-  days.called
-}
 
 # Solution B - With a for cycle
 
-calls2 = function(N) {
-  res = 0
-  for(i in 1:N) {
-    calls.sample = sample(1:7, 12, replace=T)
-    if (count.weekdays(calls.sample)==7) {
-      res=res+1
-    }
+calls.cycleImpl = function(N) {
+  r = 0
+  for (i in 1:N) {
+    call.sample = sample(1:7, 12, replace=TRUE)
+    weekdaysWithCalls = countWeekdaysWithCalls(call.sample)
+    if (weekdaysWithCalls == 7) r = r+1
   }
-  res/N
+  r/N
 }
 
-calls2(1000)
+calls.cycleImpl(1000)
 
 # Problem 5.5
 
@@ -127,23 +120,3 @@ cards.test = function(N) {
   samples = sapply(1:N, function(x) gen.sample())
   sum(samples[1,] == "ww") / sum(samples[2,] == "w")
 }
-
-# Problem 12.1
-
-# John has 5 keys, but isn't sure which one is for his room.
-# He tries each of the keys, remembering the ones he checked.
-# What is the probability that he unlocks the room on the 5th key?
-
-keys.test = function(N) {
-  keys.samples = sapply(1:N, function(x) sample(1:5, 5, replace=FALSE))
-  sum(keys.samples[5,] == 5)/N
-}
-
-keys.test(10000)
-
-# Problem 12.2
-
-# There is a deck of shuffled cards.
-# The cards get distributed among 4 players.
-# What is the probability that each player has one ace?
-
